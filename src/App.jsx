@@ -1,12 +1,26 @@
+import { Component } from 'react';
 import logo from './logo.svg';
-import todo from './todo-list.svg';
 import Hello from './Hello';
 import Welcome from './Welcome';
-import Images from './Images';
 import './App.css';
 import './New.css';
 
-
+class Product extends Component{
+  // constructor(props){
+  //   super(props);
+  // }
+  
+  render(){
+    return  (
+      <div>
+        <h3>{this.props.text}</h3>
+        <div><b>{this.props.count} հատ</b></div>
+        
+      </div>
+      
+    );
+  }
+}
 
 function Name(){
 const name = 'John Smith';
@@ -27,10 +41,13 @@ function App() {
 
   return (
     <div className="App">
+      
       <header className="App-header">
-        <Images src={logo}/>
-        <Images src={todo} />
+        
         <Name />
+        <Product text="mi ban" count="35"/>
+        <Product text="mi 2 ban" count="45"/>
+        <Product text="mi 3 ban" count="55"/>
         <Welcome name='to homework 60'/>
         <img src={logo} className="App-logo" alt="logo" />
         <p>
