@@ -10,10 +10,10 @@ class Product extends Component{
       
         const {name, price, description} = this.props;
         return (
-            <div>
-            <Name text={name}/>&nbsp;|&nbsp;
-            <Price text={price}/>&nbsp;|&nbsp;
-             <Description text={description}/>
+            <div className='product-row'>
+                <Name text={name}/>&nbsp;|&nbsp;
+                <Price text={price}/>&nbsp;|&nbsp;
+                <Description text={description}/>
             </div>
             );
     }

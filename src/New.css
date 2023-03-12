@@ -1,3 +1,15 @@
 .W80{
     width: 80px;
 }
+.product-row{
+    padding: 10px;
+    display: flex;
+}
+.product-row button{
+    font-weight: normal;
+    font-size: 14px;
+    height: 32px;
+}
+.product-row span:first-child{
+    width: 56px;
+}
