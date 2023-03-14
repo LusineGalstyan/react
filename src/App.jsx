@@ -8,8 +8,6 @@ import Todolist from './Todolist/Todolist';
 
 
 
-
-
 class App extends Component {
 state = {
   amd: 0,
