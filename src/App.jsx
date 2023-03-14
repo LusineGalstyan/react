@@ -1,7 +1,13 @@
 import { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import './App.css';
 import './New.css';
 import Product from './Product/Product';
+import Todolist from './Todolist/Todolist';
+
+
+
 
 
 class App extends Component {
@@ -39,6 +45,7 @@ this.setState({
 
 
 render(){
+  
   const productComponents = this.state.products.map((product)=>{
     return (
       <Product 
@@ -54,6 +61,16 @@ render(){
 
     return (
       <div className="App">
+
+        <Todolist/>
+        <br/>
+        <br/>
+        <hr/>
+
+        
+
+
+
       {productComponents}<br/><br/>
 
      AMD: <input
