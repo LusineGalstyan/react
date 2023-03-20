@@ -1,61 +1,127 @@
 import { Component } from 'react';
-import {Form, Container, Button, Row, Col, Card } from 'react-bootstrap';
+import { Container, Button, InputGroup, Form, Row, Col } from 'react-bootstrap';
+import { idGenerator } from "../utils/helpers";
+import Task from './Task';
+import styles from './todo.module.css';
 
+class Todolist extends Component {
+    state = {
+        tasks: [],
+        newTaskTitle: "",
+        selectedTasks: new Set(),
+    };
+    handleInputChange = (event) => {
 
-class Todolist extends Component{
+        const newTaskTitle = event.target.value;
+        this.setState({
+            newTaskTitle,
+        });
+    };
+    handleInputKeyDown = (event) => {
+        if (event.code === 'Enter') {
+            this.addNewTask();
+        }
+    };
+    addNewTask = () => {
+        const trimmedTitle = this.state.newTaskTitle.trim();
+        if (!trimmedTitle) {
+            return;
+        }
+        const newTask = {
+            id: idGenerator(),
+            title: trimmedTitle,
+        };
+        const tasks = [...this.state.tasks];
+        tasks.push(newTask);
+        this.setState({
+            tasks,
+            newTaskTitle: ''
+        });
+    };
+    onTaskDelete = (taskId) => {
+        const {selectedTasks, tasks} = this.state;
+        const newTasks = tasks.filter(task => task.id !== taskId);
+        const newState = {tasks: newTasks};
     
-    
-    render(){
-      
+        if(selectedTasks.has(taskId)){
+          const newSelectedTasks = new Set(selectedTasks);
+          newSelectedTasks.delete(taskId);
+          newState.selectedTasks = newSelectedTasks;
+        }
+        this.setState(newState);
+      };
+      onTaskSelect = (taskId)=>{
+        const selectedTasks = new Set(this.state.selectedTasks);
+        if(selectedTasks.has(taskId)){
+          selectedTasks.delete(taskId);
+        }
+        else {
+          selectedTasks.add(taskId);
+        }
+        this.setState({ selectedTasks });
+      };
+      deleteSelectedTasks = ()=>{
+          const newTasks = [];
+          const {selectedTasks, tasks} = this.state;
         
+        tasks.forEach((task)=>{
+              if(!selectedTasks.has(task.id)){
+                newTasks.push(task);
+              }
+        });
+        this.setState({
+          tasks: newTasks,
+          selectedTasks: new Set(),
+        });
+      };
+
+    render() {
+        const isAddNewTaskButtonDisabled = !this.state.newTaskTitle.trim();
         return (
-            <div className='blTodolist'>
-                <Container>
-                    <Row className="justify-content-center">
-                        <Col sm={8} xs={12}>
-                            <Form>
-                                <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Container>
+                <Row className="justify-content-center" >
+                    <Col xs='12' sm='8' mds='6'>
+                        <InputGroup className="mb-3 mt-4">
+                            <Form.Control
+                                placeholder="Task title"
+                                onChange={this.handleInputChange}
+                                onKeyDown={this.handleInputKeyDown}
+                                value={this.state.newTaskTitle}
 
-                                    <Form.Control type="text" placeholder="input text" className="mb-3"/>
-                                
-                                    <Form.Control as="textarea" rows={6} className="mb-3"/>
-                                    
-                                    <div className='d-grid d-md-flex justify-content-md-end'>
-                                        <Button variant="success" type="submit">
-                                            Add
-                                        </Button>
-                                    </div>
-
-                                    
-                                
-                                </Form.Group> 
-                            </Form>
-                        </Col>
-                    </Row>
-                    
-                    <Row>
-                        <Col md={4} sm={6}>
-                        <Card style={{ width: '18rem' }}>
-                        <Card.Body>
-                            <Card.Title>Card Title</Card.Title>
-                            <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                        </Card>
-                        </Col>
-                    </Row>
-        
-                    
-                </Container>
-
-                
-            </div> 
-           
-            );
+                            />
+                            <Button 
+                                variant="success"
+                                onClick={this.addNewTask}
+                                disabled={isAddNewTaskButtonDisabled}
+                            >
+                                Add
+                            </Button>
+                        </InputGroup>
+                    </Col>
+                </Row>
+                <Row>
+                    {this.state.tasks.map((task) => {
+                        return (
+                            <Task
+                                data={task}
+                                key={task.id}
+                                onTaskDelete={this.onTaskDelete}
+                                onTaskSelect={this.onTaskSelect}
+                            />
+                        );
+                    })}
+                </Row>
+                <Button
+                    className={styles.deletSelected}
+                    variant="danger"
+                    onClick={this.deleteSelectedTasks}
+                    disabled={!this.state.selectedTasks.size}
+                >
+                    Delete selected
+                </Button>
+            </Container>
+        );
     }
-  } 
- 
-  export default Todolist;
+}
+
+export default Todolist;
