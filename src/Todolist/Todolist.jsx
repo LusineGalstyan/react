@@ -1,8 +1,12 @@
-import { Component, PureComponent} from 'react';
+import { Component, PureComponent, } from 'react';
 import { Container, Button, InputGroup, Form, Row, Col } from 'react-bootstrap';
 import { idGenerator } from "../utils/helpers";
 import Task from './Task';
 import styles from './todo.module.css';
+import Counter from './Counter';
+
+
+
 
 class Todolist extends PureComponent {
       
@@ -82,11 +86,15 @@ class Todolist extends PureComponent {
           selectedTasks: new Set(),
         });
       };
+      
 
     render() {
         const isAddNewTaskButtonDisabled = !this.state.newTaskTitle.trim();
         return (
             <Container>
+                <Row>
+                    <Counter />
+                </Row>
                 <Row className="justify-content-center" >
                     <Col xs='12' sm='8' mds='6'>
                         <InputGroup className="mb-3 mt-4">
