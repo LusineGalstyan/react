@@ -1,11 +1,45 @@
-import { Component, PureComponent, } from 'react';
+import { PureComponent,  } from 'react';
 import { Container, Button, InputGroup, Form, Row, Col } from 'react-bootstrap';
 import { idGenerator } from "../utils/helpers";
 import Task from './Task';
 import styles from './todo.module.css';
-import Counter from './Counter';
+import React, { useState } from 'react';
 
 
+function Counter() {
+    const [counter, setCounter] = useState(0);
+    const increase = () => {
+        setCounter(count => count + 1);
+    };
+    const decrease = () => {
+        setCounter(count => count - 1);
+    };
+    
+    
+     
+  return (
+    <Col xs={12} sm={6} md={4} lg={3}>
+        <h4>React Counter</h4>
+        
+        <Row>
+            <Col md={4}>
+                <div className='d-grid'>
+                    <Button variant="secondary" onClick={decrease}>-</Button>
+                </div>
+            </Col>
+            <Col md={4} >
+                {counter}
+            </Col>
+            <Col md={4}>
+                <div className='d-grid'>
+                    <Button variant="secondary" onClick={increase}>+</Button>
+                </div>
+        
+            </Col>
+        </Row>
+    </Col>
+  );
+}
 
 
 class Todolist extends PureComponent {
@@ -93,7 +127,7 @@ class Todolist extends PureComponent {
         return (
             <Container>
                 <Row>
-                    <Counter />
+                    <Counter  />
                 </Row>
                 <Row className="justify-content-center" >
                     <Col xs='12' sm='8' mds='6'>
