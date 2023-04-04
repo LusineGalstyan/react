@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import { Button, Col, Card, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
@@ -6,14 +7,13 @@ import styles from "./task/task.module.css";
 function Task(props) {
     const task = props.data;
     return (
-
         <Col xs={12} sm={6} md={4} lg={3}>
             <Card className='mt-2 mb-2'>
                 <Card.Body>
                 <Form.Check 
-        className={styles.selectTask}
-        onClick={()=>props.onTaskSelect(task.id)}
-        />
+                    className={styles.selectTask}
+                    onClick={()=>props.onTaskSelect(task.id)}
+                    />
                     <Card.Title>{task.title}</Card.Title>
                     <Card.Text>
                         Description
@@ -32,4 +32,4 @@ function Task(props) {
         </Col>
     );
 }
-export default Task;
+export default memo(Task);

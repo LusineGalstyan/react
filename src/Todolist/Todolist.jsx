@@ -1,15 +1,17 @@
-import { Component } from 'react';
+import { Component, PureComponent} from 'react';
 import { Container, Button, InputGroup, Form, Row, Col } from 'react-bootstrap';
 import { idGenerator } from "../utils/helpers";
 import Task from './Task';
 import styles from './todo.module.css';
 
-class Todolist extends Component {
+class Todolist extends PureComponent {
+      
     state = {
         tasks: [],
         newTaskTitle: "",
         selectedTasks: new Set(),
     };
+    
     handleInputChange = (event) => {
 
         const newTaskTitle = event.target.value;
@@ -17,11 +19,13 @@ class Todolist extends Component {
             newTaskTitle,
         });
     };
+
     handleInputKeyDown = (event) => {
         if (event.code === 'Enter') {
             this.addNewTask();
         }
     };
+
     addNewTask = () => {
         const trimmedTitle = this.state.newTaskTitle.trim();
         if (!trimmedTitle) {
@@ -38,6 +42,7 @@ class Todolist extends Component {
             newTaskTitle: ''
         });
     };
+
     onTaskDelete = (taskId) => {
         const {selectedTasks, tasks} = this.state;
         const newTasks = tasks.filter(task => task.id !== taskId);
@@ -50,6 +55,7 @@ class Todolist extends Component {
         }
         this.setState(newState);
       };
+
       onTaskSelect = (taskId)=>{
         const selectedTasks = new Set(this.state.selectedTasks);
         if(selectedTasks.has(taskId)){
@@ -60,6 +66,7 @@ class Todolist extends Component {
         }
         this.setState({ selectedTasks });
       };
+
       deleteSelectedTasks = ()=>{
           const newTasks = [];
           const {selectedTasks, tasks} = this.state;
@@ -69,6 +76,7 @@ class Todolist extends Component {
                 newTasks.push(task);
               }
         });
+
         this.setState({
           tasks: newTasks,
           selectedTasks: new Set(),
@@ -87,7 +95,6 @@ class Todolist extends Component {
                                 onChange={this.handleInputChange}
                                 onKeyDown={this.handleInputKeyDown}
                                 value={this.state.newTaskTitle}
-
                             />
                             <Button 
                                 variant="success"
