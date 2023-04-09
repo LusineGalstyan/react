@@ -4,6 +4,7 @@ import { idGenerator } from "../utils/helpers";
 import Task from './Task';
 import styles from './todo.module.css';
 import React, { useState } from 'react';
+import ConfirmDialog from "./ConfirmDialog";
 
 
 function Counter() {
@@ -48,6 +49,7 @@ class Todolist extends PureComponent {
         tasks: [],
         newTaskTitle: "",
         selectedTasks: new Set(),
+        isConfirmDialogOpen: false
     };
     
     handleInputChange = (event) => {
@@ -118,12 +120,24 @@ class Todolist extends PureComponent {
         this.setState({
           tasks: newTasks,
           selectedTasks: new Set(),
+          isConfirmDialogOpen: false
+        });
+      };
+      openConfirmDialog = ()=>{
+        this.setState({
+          isConfirmDialogOpen: true
+        });
+      };
+      closeConfirmDialog = ()=>{
+        this.setState({
+          isConfirmDialogOpen: false
         });
       };
       
 
     render() {
-        const isAddNewTaskButtonDisabled = !this.state.newTaskTitle.trim();
+        const {isConfirmDialogOpen, newTaskTitle, selectedTasks} = this.state;
+        const isAddNewTaskButtonDisabled = !newTaskTitle.trim();
         return (
             <Container>
                 <Row>
@@ -148,7 +162,7 @@ class Todolist extends PureComponent {
                         </InputGroup>
                     </Col>
                 </Row>
-                <Row>
+                <Row className='todo_mb-100__gO2kD'>
                     {this.state.tasks.map((task) => {
                         return (
                             <Task
@@ -160,14 +174,23 @@ class Todolist extends PureComponent {
                         );
                     })}
                 </Row>
-                <Button
-                    className={styles.deletSelected}
-                    variant="danger"
-                    onClick={this.deleteSelectedTasks}
-                    disabled={!this.state.selectedTasks.size}
-                >
-                    Delete selected
-                </Button>
+                <div className="todo_todoBottom__ptg7r">
+                    <Button
+                        className={styles.deletSelected}
+                        variant="danger"
+                        onClick={this.openConfirmDialog}
+                        disabled={!selectedTasks.size}>
+                        Delete selected
+                    </Button>
+                </div>
+                
+                {isConfirmDialogOpen && 
+                <ConfirmDialog 
+                    tasksCount={selectedTasks.size}
+                    onCancel={this.closeConfirmDialog}
+                    onSubmit={this.deleteSelectedTasks}
+                />
+                }
             </Container>
         );
     }
