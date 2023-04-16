@@ -12,7 +12,7 @@ function Task(props) {
                 <Card.Body>
                 <Form.Check 
                     className={styles.selectTask}
-                    onClick={()=>props.onTaskSelect(task.id)}
+                    onClick={()=>props.onTaskSelect(task._id)}
                     />
                     <Card.Title>{task.title}</Card.Title>
                     <Card.Text>
@@ -23,7 +23,7 @@ function Task(props) {
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </Button>
                         <Button variant="danger" className={styles.deleteButton}
-                            onClick={()=>props.onTaskDelete(task.id)}>
+                            onClick={()=>props.onTaskDelete(task._id)}>
                             <FontAwesomeIcon icon={faTrash} />
                         </Button>
                         </div>
