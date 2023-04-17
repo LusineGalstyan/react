@@ -1,15 +1,14 @@
 
 import { Container, Button, InputGroup, Form, Row, Col } from 'react-bootstrap';
 import Task from './Task';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ConfirmDialog from "./ConfirmDialog";
 import DeleteSelected from "./deleteSelected/DeleteSelected";
 import styles from "./todo.module.css";
+import TaskApi from '../api/taskApi';
 
 
-
-
-
+const taskApi = new TaskApi();
 
 function Todolist () {
     const[tasks, setTasks]=useState([]);
@@ -17,7 +16,25 @@ function Todolist () {
     const[selectedTasks, setSelectedTasks]=useState(new Set());
     const [taskToDelete, setTaskToDelete] = useState(null);
       
-    
+    useEffect(()=>{
+        taskApi.getAll()
+        .then((tasks) => {
+                  setTasks(tasks);
+                 
+                });
+        // fetch(apiUrl+'/task', {
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        
+        //   })
+        //     .then((result) => result.json())
+        //     .then((tasks) => {
+        //       setTasks(tasks);
+             
+        //     });
+    },[]);
     
     
     const handleInputChange = (event) => {
@@ -37,24 +54,22 @@ function Todolist () {
         if (!trimmedTitle) {
             return;
         }
-        const apiUrl = "http://localhost:3001/task";
+        
         const newTask = {
             title: trimmedTitle,
         };
-        fetch(apiUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newTask),
-          })
-            .then((result) => result.json())
-            .then((task) => {
-              const tasksCopy = [...tasks];
-              tasksCopy.push(task);
-              setTasks(tasksCopy);
-              setNewTaskTitle("");
-            });
+        taskApi.add(newTask)
+        .then((task) => {
+            const tasksCopy = [...tasks];
+            tasksCopy.push(task);
+            setTasks(tasksCopy);
+            setNewTaskTitle("");
+          });
+
+
+        
+           
+            
     };
 
 
@@ -118,7 +133,7 @@ function Todolist () {
                     </InputGroup>
                 </Col>
             </Row>
-            <Row className={styles.todo_mb-100}>
+            <Row className={styles.mb_100}>
                 {tasks.map((task) => {
                     return (
                         <Task
@@ -130,7 +145,7 @@ function Todolist () {
                     );
                 })}
             </Row>
-            <div className={styles.todo_todoBottom}>
+            <div className={styles.todoBottom}>
             <DeleteSelected
                 disabled={!selectedTasks.size}
                 tasksCount={selectedTasks.size}
