@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import { Button } from "react-bootstrap";
 import ConfirmDialog from "../ConfirmDialog";
 import styles from "./deleteSelected.module.css";
@@ -33,5 +34,10 @@ function DeleteSelected(props) {
     </>
   );
 }
-
+DeleteSelected.propTypes={
+  // disabled: PropTypes.object.isRequired,
+  // tasksCount: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  
+  };
 export default DeleteSelected;

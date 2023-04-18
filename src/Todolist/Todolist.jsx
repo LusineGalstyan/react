@@ -1,10 +1,12 @@
 
-import { Container, Button, InputGroup, Form, Row, Col } from 'react-bootstrap';
+import { ToastContainer, toast } from "react-toastify";
+import { Container, Button, Row, Col } from 'react-bootstrap';
 import Task from './Task';
 import React, { useEffect, useState } from 'react';
 import ConfirmDialog from "./ConfirmDialog";
 import DeleteSelected from "./deleteSelected/DeleteSelected";
 import styles from "./todo.module.css";
+import TaskModal from './TaskModal/TaskModal';
 import TaskApi from '../api/taskApi';
 
 
@@ -12,13 +14,12 @@ const taskApi = new TaskApi();
 
 function Todolist () {
     const[tasks, setTasks]=useState([]);
-    const[newTaskTitle, setNewTaskTitle]=useState("");
-    const[selectedTasks, setSelectedTasks]=useState(new Set());
+      const[selectedTasks, setSelectedTasks]=useState(new Set());
     const [taskToDelete, setTaskToDelete] = useState(null);
+    const [isAddTaskModalOpen, setIsAddTaskModalOpen]=useState(false);
       
     useEffect(()=>{
-        taskApi.getAll()
-        .then((tasks) => {
+        taskApi.getAll().then((tasks) => {
                   setTasks(tasks);
                  
                 });
@@ -37,33 +38,32 @@ function Todolist () {
     },[]);
     
     
-    const handleInputChange = (event) => {
+    // const handleInputChange = (event) => {
 
-        setNewTaskTitle(event.target.value); 
+    //     // setNewTaskTitle(event.target.value); 
         
-    };
+    // };
 
-    const handleInputKeyDown = (event) => {
-        if (event.code === 'Enter') {
-            addNewTask();
-        }
-    };
+    // const handleInputKeyDown = (event) => {
+    //     if (event.code === 'Enter') {
+    //        onAddNewTask();
+    //     }
+    // };
 
-    const addNewTask = () => {
-        const trimmedTitle = newTaskTitle.trim();
-        if (!trimmedTitle) {
-            return;
-        }
+    const onAddNewTask = (newTask) => {
         
-        const newTask = {
-            title: trimmedTitle,
-        };
         taskApi.add(newTask)
         .then((task) => {
             const tasksCopy = [...tasks];
             tasksCopy.push(task);
             setTasks(tasksCopy);
-            setNewTaskTitle("");
+            setIsAddTaskModalOpen(false);
+            toast.success('The task has been added successfully!');
+
+      })
+      .catch((err) => {
+        console.log("err", err);
+        toast.error(err.message);
           });
 
 
@@ -109,28 +109,23 @@ function Todolist () {
         setTasks(newTasks);
         setSelectedTasks(new Set());
       };
-      const isAddNewTaskButtonDisabled = !newTaskTitle.trim();
+    //   let newTaskTitle="";
+      
       
     return (
         <Container>
             
             <Row className="justify-content-center" >
                 <Col xs='12' sm='8' mds='6'>
-                    <InputGroup className="mb-3 mt-4">
-                        <Form.Control
-                            placeholder="Task title"
-                            onChange={handleInputChange}
-                            onKeyDown={handleInputKeyDown}
-                            value={newTaskTitle}
-                        />
+                   
                         <Button 
                             variant="success"
-                            onClick={addNewTask}
-                            disabled={isAddNewTaskButtonDisabled}
+                            onClick={()=>setIsAddTaskModalOpen(true)}
+                           
                         >
-                            Add
+                            Add new task
                         </Button>
-                    </InputGroup>
+                
                 </Col>
             </Row>
             <Row className={styles.mb_100}>
@@ -163,6 +158,25 @@ function Todolist () {
                 }}
             />
            ) }
+           {isAddTaskModalOpen &&(
+           <TaskModal
+           onCancel={()=>setIsAddTaskModalOpen(false)}
+           onSave={onAddNewTask}
+           />
+	   )}
+          
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
         </Container>
     );
             }
