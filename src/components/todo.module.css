@@ -1,0 +1,16 @@
+.todoBottom{
+    position: fixed;
+    left:0;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 50px;
+}
+
+.mb_100{
+margin-bottom: 110px;
+}
