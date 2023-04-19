@@ -35,8 +35,8 @@ function DeleteSelected(props) {
   );
 }
 DeleteSelected.propTypes={
-  // disabled: PropTypes.object.isRequired,
-  // tasksCount: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  tasksCount: PropTypes.number.isRequired,
   onSubmit: PropTypes.func.isRequired,
   
   };

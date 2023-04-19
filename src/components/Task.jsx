@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import { memo } from 'react';
 import PropTypes from "prop-types";
 import { Button, Col, Card, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,9 +11,9 @@ function Task(props) {
         <Col xs={12} sm={6} md={4} lg={3}>
             <Card className='mt-2 mb-2'>
                 <Card.Body>
-                <Form.Check 
-                    className={styles.selectTask}
-                    onClick={()=>props.onTaskSelect(task._id)}
+                    <Form.Check
+                        className={styles.selectTask}
+                        onClick={() => props.onTaskSelect(task._id)}
                     />
                     <Card.Title>{task.title}</Card.Title>
                     <Card.Text>
@@ -24,19 +24,19 @@ function Task(props) {
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </Button>
                         <Button variant="danger" className={styles.deleteButton}
-                            onClick={()=>props.onTaskDelete(task._id)}>
+                            onClick={() => props.onTaskDelete(task._id)}>
                             <FontAwesomeIcon icon={faTrash} />
                         </Button>
-                        </div>
+                    </div>
                 </Card.Body>
             </Card>
         </Col>
     );
 }
-Task.propTypes={
-data: PropTypes.object.isRequired,
-onTaskDelete: PropTypes.func.isRequired,
-onTaskSelect: PropTypes.func.isRequired,
+Task.propTypes = {
+    data: PropTypes.object.isRequired,
+    onTaskDelete: PropTypes.func.isRequired,
+    onTaskSelect: PropTypes.func.isRequired,
 };
 
 export default memo(Task);
