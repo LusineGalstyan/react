@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useLayoutEffect, useEffect } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-
 import DatePicker from 'react-datepicker';
 import PropTypes from "prop-types";
+import { formatDate } from '../../utils/helpers';
 import styles from './taskModal.module.css';
 
 
@@ -12,22 +12,49 @@ function TaskModal(props) {
     const [date, setDate] = useState(new Date());
     const [isTitleValid, setIsTitleValid] = useState(false);
 
-    const saveTask = () => {
-        const newTask = {
-            title: title.trim(),
-            description: description.trim(),
+  useEffect(()=>{
+    const {data} = props;
+    if(data){
+      setTitle(data.title);
+      setDescription(data.description);
+      console.log('data.date', data.date)
+      setDate(data.date ? new Date(data.date): new Date());
+    }
+  }, []);
 
-            date: date.toISOString().slice(0, 10)
-        };
-        props.onSave(newTask);
+  const saveTask = () => {
+    const newTask = {
+      title: title.trim(),
+      description: description.trim(),
+      date: formatDate(date),
     };
-    const onTitleChange = (event) => {
-        const { value } = event.target;
-        const trimmedTitle = value.trim();
+    if(props.data){
+      newTask._id = props.data._id;
+    }
+    props.onSave(newTask);
+  };
 
-        setIsTitleValid(!!trimmedTitle);
-        setTitle(value);
+  const onTitleChange = (event) => {
+    const { value } = event.target;
+    const trimmedTitle = value.trim();
+
+    setIsTitleValid(!!trimmedTitle);
+    setTitle(value);
+  };
+
+  useLayoutEffect(() => {
+    const keydownHandler = (event) => {
+      const {key, ctrlKey, metaKey} = event;
+        if(key === 's' && (ctrlKey || metaKey)){
+          event.preventDefault();
+          saveTask();
+        }
+      };
+    document.addEventListener("keydown", keydownHandler);
+    return () => {
+      document.removeEventListener("keydown", keydownHandler);
     };
+  }, [title, description, date]);
 
     return (
         <Modal size="md" show={true} onHide={props.onCancel}>
@@ -76,6 +103,7 @@ function TaskModal(props) {
 TaskModal.propTypes = {
     onCancel: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired,
+data: PropTypes.object
 };
 
 export default TaskModal;
