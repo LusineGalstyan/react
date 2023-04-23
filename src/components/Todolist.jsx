@@ -1,11 +1,14 @@
+import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import { Container, Button, Row, Col } from 'react-bootstrap';
 import Task from './Task';
-import React, { useEffect, useState } from 'react';
+
 import ConfirmDialog from "./ConfirmDialog";
 import DeleteSelected from "./deleteSelected/DeleteSelected";
 import styles from "./todo.module.css";
 import TaskModal from './TaskModal/TaskModal';
+import NavBar from "./NavBar/NavBar";
+import Filters from "./filters/Filters";
 import TaskApi from '../api/taskApi';
 
 
@@ -18,12 +21,15 @@ function Todolist() {
     const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
     const [editableTask, setEditableTask] = useState(null);
 
-    useEffect(() => {
-        taskApi.getAll().then((tasks) => {
-            setTasks(tasks);
-        });
-
-    }, []);
+  useEffect(() => {
+    taskApi.getAll()
+    .then((tasks) => {
+      setTasks(tasks);
+    })
+    .catch((err) => {
+      toast.error(err.message);
+    });
+  }, []);
 
     const onAddNewTask = (newTask) => {
 
@@ -103,8 +109,12 @@ function Todolist() {
     taskApi
       .update(editedTask)
       .then((task) => {
-       
+        
+        const newTasks = [...tasks];
+        const foundIndex = newTasks.findIndex((t)=>t._id === task._id);
+        newTasks[foundIndex] = task;
         toast.success(`Tasks havs been updated successfully!`);
+        setTasks(newTasks);
         setEditableTask(null);
       })
       .catch((err) => {
@@ -114,6 +124,9 @@ function Todolist() {
 
   return (
     <Container>
+    <Row>
+    <NavBar />
+    </Row>
       <Row className="justify-content-center m-3">
         <Col xs="6" sm="4" md="3">
           <Button variant="success" onClick={() => setIsAddTaskModalOpen(true)}>
@@ -131,6 +144,9 @@ function Todolist() {
           </Button>
         </Col>
       </Row>
+      <Row>
+      <Filters />
+      </Row>
       <Row className={styles.mb_100}>
         {tasks.map((task) => {
           return (
@@ -141,6 +157,7 @@ function Todolist() {
               onTaskSelect={onTaskSelect}
               checked={selectedTasks.has(task._id)}
               onTaskEdit={setEditableTask}
+              onStatusChange={onEditTask}
             />
           );
         })}

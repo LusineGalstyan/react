@@ -1,4 +1,4 @@
-import { Component } from 'react';
+//import { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,14 +8,14 @@ import Todolist from './components/Todolist';
 
 
 
-class App extends Component {
+function App () {
 
-  render() {
+  
     return (
       <div className="App">
         <Todolist />
       </div>
     );
   };
-};
+
 export default App;

@@ -2,7 +2,7 @@ import { memo } from 'react';
 import PropTypes from "prop-types";
 import { Button, Col, Card, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPenToSquare, faCheck,  faHistory } from "@fortawesome/free-solid-svg-icons";
 import { formatDate} from '../utils/helpers';
 import styles from "./task/task.module.css";
 
@@ -18,18 +18,42 @@ function Task(props) {
         		checked={props.checked}
                     />
                     <Card.Title className={styles.textElipsis}>{task.title}</Card.Title>
-                    <Card.Text className={styles.textElipsis}>{task.description}</Card.Text>
+                    <Card.Text className={styles.textElipsis}>
+		    {task.description}
+		    </Card.Text>
                     <Card.Text>Status: {task.status}</Card.Text>
                     <Card.Text>Created At: {formatDate(task.created_at)}</Card.Text>
                     <Card.Text>Deadline: {formatDate(task.date)}</Card.Text>
                     <div className={styles.actionButtons}>
-                        <Button variant="warning"
+      {
+        task.status === 'active' ?
+        <Button 
+        title="Mark as done" 
+        variant="success" 
+        onClick={() => props.onStatusChange({status: 'done', _id: task._id})}>
+          <FontAwesomeIcon icon={faCheck} />
+        </Button> :
+        <Button 
+        title="Mark as active" 
+        variant="info" 
+        onClick={() => props.onStatusChange({status: 'active', _id: task._id})}>
+          <FontAwesomeIcon icon={faHistory} />
+        </Button>
+      }
+                        <Button 
+			title="Edit"
+			className={styles.actionButton}
+			variant="warning"
 			onClick={()=>props.onTaskEdit(task)}
             		>
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </Button>
-                        <Button variant="danger" className={styles.deleteButton}
-                            onClick={() => props.onTaskDelete(task._id)}>
+                        <Button 
+			title="Delete"
+			variant="danger" 
+			className={styles.actionButton}
+                            onClick={() => props.onTaskDelete(task._id)}
+			    >
                             <FontAwesomeIcon icon={faTrash} />
                         </Button>
                     </div>
