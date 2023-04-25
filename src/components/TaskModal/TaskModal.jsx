@@ -18,6 +18,7 @@ function TaskModal(props) {
       setTitle(data.title);
       setDescription(data.description);
       setDate(data.date ? new Date(data.date): new Date());
+      setIsTitleValid(true);
     }
   }, [props]);
 
@@ -105,4 +106,4 @@ TaskModal.propTypes = {
 data: PropTypes.object
 };
 
-export default TaskModal;
+export default memo(TaskModal);

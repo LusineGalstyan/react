@@ -5,6 +5,8 @@
 .filterItem{
     font-size: 10px;
 }
-.filterItem>legend{
-    font-size: 20px;
+.filterItem>label{
+    font-size: 14px;
+    text-align: left;
+    color:gray
 }

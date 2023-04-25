@@ -1,17 +1,21 @@
 import { memo } from "react";
-// import Button from "react-bootstrap/Button";
+import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-// import Form from "react-bootstrap/Form";
+import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faSearch, faFilter, faRefresh } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faFilter, faRefresh } from "@fortawesome/free-solid-svg-icons";
+import logo from '../../todo-list.svg';
+import styles from "./nav.css";
 
 function NavBar() {
   return (
     <Navbar bg="light" expand="sm">
-      <Container fluid>
-        <Navbar.Brand href="#">Todo</Navbar.Brand>
+      <Container>
+        <Navbar.Brand href="#">
+        <img src={logo} />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0">
