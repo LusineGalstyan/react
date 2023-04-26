@@ -9,16 +9,21 @@ main{
     height: 60px;
     background-color: #8EC5FC;
     background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
-
-
-    
     display: flex;
     align-items: center;
     justify-content: flex-end;
     padding: 10px 50px;
-    box-shadow: 0 2px 120px 0 rgb(31 38 103);
+    
 }
-
+.flexRight{
+    display: flex;
+    justify-content: flex-end;
+}
 .mb_100{
 padding-bottom: 100px;
+}
+.flexEnd{
+    display: flex;
+    justify-content: flex-end;
+    gap:10px
 }

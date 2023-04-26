@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import { Container, Button, Row, Col } from 'react-bootstrap';
-import Task from './Task';
-
-import ConfirmDialog from "./ConfirmDialog";
-import DeleteSelected from "./deleteSelected/DeleteSelected";
+import Task from '../task/Task';
+import ConfirmDialog from "../ConfirmDialog";
+import DeleteSelected from "../deleteSelected/DeleteSelected";
 import styles from "./todo.module.css";
-import TaskModal from './TaskModal/TaskModal';
-import NavBar from "./NavBar/NavBar";
-import Filters from "./filters/Filters";
-import TaskApi from '../api/taskApi';
+import TaskModal from '../taskModal/TaskModal';
+import NavBar from "../navBar/NavBar";
+import Filters from "../filters/Filters";
+import TaskApi from '../../api/taskApi';
 
 
 const taskApi = new TaskApi();
@@ -20,7 +19,7 @@ function Todolist() {
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
   const [editableTask, setEditableTask] = useState(null);
-
+  
   const getTasks = (filters) => {
     taskApi.getAll(filters)
       .then((tasks) => {
@@ -30,13 +29,13 @@ function Todolist() {
         toast.error(err.message);
       });
   };
-
+  
   useEffect(() => {
     getTasks();
   }, []);
-
+  
   const onAddNewTask = (newTask) => {
-
+    
     taskApi.add(newTask)
       .then((task) => {
         const tasksCopy = [...tasks];
@@ -60,14 +59,14 @@ function Todolist() {
           newSelectedTasks.delete(taskId);
           setSelectedTasks(newSelectedTasks);
         }
-
+        
         toast.success("The task has been deleted successfully!");
       })
       .catch((err) => {
         toast.error(err.message);
       });
   };
-
+  
   const onTaskSelect = (taskId) => {
     const selectedTasksCopy = new Set(selectedTasks);
     if (selectedTasksCopy.has(taskId)) {
@@ -77,7 +76,7 @@ function Todolist() {
     }
     setSelectedTasks(selectedTasksCopy);
   };
-
+  
   const deleteSelectedTasks = () => {
     taskApi
       .deleteMany([...selectedTasks])
@@ -99,21 +98,21 @@ function Todolist() {
         toast.error(err.message);
       });
   };
-
+  
   const selectAllTasks = () => {
     const taskIds = tasks.map((task) => task._id);
     setSelectedTasks(new Set(taskIds));
   };
-
+ 
   const resetSelectedTasks = () => {
     setSelectedTasks(new Set());
   };
-
+ 
   const onEditTask = (editedTask) => {
     taskApi
       .update(editedTask)
       .then((task) => {
-
+        
         const newTasks = [...tasks];
         const foundIndex = newTasks.findIndex((t) => t._id === task._id);
         newTasks[foundIndex] = task;
@@ -125,28 +124,26 @@ function Todolist() {
         toast.error(err.message);
       });
   };
-
+ 
   const onFilter = (filters) => {
     getTasks(filters);
   };
-
+  
   return (
     <main>
       <NavBar />
-      <Container>
-
-        <Row className="justify-content-center m-3">
-          <Col xs="6" sm="4" md="3">
+     <Container>
+       
+        <Row className="justify-content-right mt-3 mb-3 ">
+          <Col xs="12" sm="12" md="12" className={styles.flexEnd}>
             <Button variant="success" onClick={() => setIsAddTaskModalOpen(true)}>
               Add new task
             </Button>
-          </Col>
-          <Col xs="6" sm="4" md="3">
+          
             <Button variant="warning" onClick={selectAllTasks}>
               Select all
             </Button>
-          </Col>
-          <Col xs="6" sm="4" md="3">
+          
             <Button variant="secondary" onClick={resetSelectedTasks}>
               Reset selected
             </Button>
@@ -170,14 +167,18 @@ function Todolist() {
             );
           })}
         </Row>
-        <div className={styles.todoBottom} >
+      </Container>
+      <div className={styles.todoBottom} >
+        <Container className={styles.flexRight}> 
+          
           <DeleteSelected
-            disabled={!selectedTasks.size}
-            tasksCount={selectedTasks.size}
-            onSubmit={deleteSelectedTasks}
-          />
-        </div>
-
+              disabled={!selectedTasks.size}
+              tasksCount={selectedTasks.size}
+              onSubmit={deleteSelectedTasks}
+            />
+          
+        </Container> 
+      </div>
         {taskToDelete && (
           <ConfirmDialog
             tasksCount={1}
@@ -213,10 +214,9 @@ function Todolist() {
           pauseOnHover
           theme="colored"
         />
-      </Container>
     </main>
-
-  );
-}
+ 
+ );
+};
 
 export default Todolist;
