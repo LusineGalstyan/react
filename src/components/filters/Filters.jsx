@@ -122,14 +122,15 @@ function Filters(props) {
             {dateOptions.map((dateOption) => {
               const dateValue = dateFilters[dateOption.value];
               return (
-                <Col sm={6} md={4} lg={3} 
+                <Col sm={6} md={6} lg={3} 
                 
                 key={dateOption.label}
                 >
                 <fieldset className={styles.filterItem}>
                   <label>{dateOption.label}</label>
                   <DatePicker
-                    showIcon
+                    
+                    
                     selected={dateValue ? new Date(dateValue): ''}
                     onChange={(date)=>onDateChange(dateOption.value, date)}
                   />

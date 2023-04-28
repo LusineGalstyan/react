@@ -3,15 +3,15 @@ import PropTypes from "prop-types";
 import { Button, Col, Card, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare, faCheck,  faHistory } from "@fortawesome/free-solid-svg-icons";
-import { formatDate} from '../utils/helpers';
-import styles from "./task/task.module.css";
+import { formatDate} from '../../utils/helpers';
+import styles from "./task.module.css";
 
 function Task(props) {
     const task = props.data;
      
     return (
-        <Col  md={12} className='mt-2 mb-2' >
-            <Card >
+        <Col lg={12} xl={6} className='mt-2 mb-2' >
+            <Card className={styles.card}>
                 <Card.Body className={styles.cardBody}>
                     
                     <div className={styles.Status} title={task.status} ></div>
