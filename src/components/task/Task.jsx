@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Button, Col, Card, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare, faCheck,  faHistory } from "@fortawesome/free-solid-svg-icons";
+// import {Link} from 'react-router-dom';
 import { formatDate} from '../../utils/helpers';
 import styles from "./task.module.css";
 
@@ -23,6 +24,7 @@ function Task(props) {
                     <div className={styles.Text}>
                         <Card.Title className={styles.textElipsis}>{task.title}</Card.Title>
                         <Card.Text className={styles.textElipsis}>{task.description}</Card.Text>
+                       
                         <div className={styles.date}>
                             <div className={styles.dateItem}>Created At: {formatDate(task.created_at)}</div>
                             <div className={styles.dateItem}>Deadline: {formatDate(task.date)}</div>
@@ -32,7 +34,9 @@ function Task(props) {
                     
                     
                     <div className={styles.BtnGroup}>
+                    
                         <div className={styles.actionButtons}>
+                    
                         {
                             task.status === 'active' ?
                             <Button 
@@ -65,6 +69,16 @@ function Task(props) {
                     >
                         <FontAwesomeIcon icon={faTrash} />
                     </Button>
+                    
+                    <Button 
+                        href={`/task/${task._id}`} 
+                        variant='secondary'
+                        className={styles.w100}
+                    >
+                    Show details
+                    </Button>
+                    
+                    
                     </div>
                     
                     

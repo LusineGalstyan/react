@@ -56,5 +56,8 @@ export default class TaskApi {
     deleteMany(taskIds) {
       return this.#request("PATCH", {body: {tasks: taskIds}});
     }
+    getSingle(taskId) {
+      return this.#request("GET", {params: taskId});
+    }
 
 }
