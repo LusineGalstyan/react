@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import { Container, Button, Row, Col } from 'react-bootstrap';
-import Task from '../task/Task';
-import ConfirmDialog from "../ConfirmDialog";
-import DeleteSelected from "../deleteSelected/DeleteSelected";
+import Task from '../../components/task/Task';
+import ConfirmDialog from "../../components/ConfirmDialog";
+import DeleteSelected from "../../components/deleteSelected/DeleteSelected";
 import styles from "./todo.module.css";
-import TaskModal from '../taskModal/TaskModal';
-import NavBar from "../navBar/NavBar";
-import Filters from "../filters/Filters";
+import TaskModal from '../../components/taskModal/TaskModal';
+
+import Filters from "../../components/filters/Filters";
 import TaskApi from '../../api/taskApi';
 
 
@@ -91,7 +91,7 @@ function Todolist() {
         setTasks(newTasks);
         setSelectedTasks(new Set());
         toast.success(
-          `${deletedTasksCount} tasks have been deleted successfully!`
+          `${deletedTasksCount} Task have been deleted successfully!`
         );
       })
       .catch((err) => {
@@ -116,7 +116,7 @@ function Todolist() {
         const newTasks = [...tasks];
         const foundIndex = newTasks.findIndex((t) => t._id === task._id);
         newTasks[foundIndex] = task;
-        toast.success(`Tasks havs been updated successfully!`);
+        toast.success(`Task have been updated successfully!`);
         setTasks(newTasks);
         setEditableTask(null);
       })
@@ -131,7 +131,7 @@ function Todolist() {
   
   return (
     <main>
-      <NavBar />
+      
      <Container>
        
         <Row className="justify-content-right mt-3 mb-3 ">
@@ -202,18 +202,7 @@ function Todolist() {
             data={editableTask}
           />
         )}
-        <ToastContainer
-          position="bottom-left"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
+       
     </main>
  
  );
