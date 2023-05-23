@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { Button, Col, Card, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare, faCheck,  faHistory } from "@fortawesome/free-solid-svg-icons";
-// import {Link} from 'react-router-dom';
 import { formatDate} from '../../utils/helpers';
 import styles from "./task.module.css";
 

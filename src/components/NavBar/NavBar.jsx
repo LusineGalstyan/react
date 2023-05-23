@@ -1,6 +1,6 @@
 import { memo } from "react";
 import {Nav, Navbar, Container} from "react-bootstrap/";
-import {NavLink, /* Nav */ } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import styles from './navbar.module.css';
 import Logo from '../../img/todo-list.svg';
 import {useSelector} from 'react-redux';
