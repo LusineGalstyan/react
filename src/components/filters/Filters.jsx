@@ -129,7 +129,7 @@ function Filters(props) {
                 <fieldset className={styles.filterItem}>
                   <label>{dateOption.label}</label>
                   <DatePicker
-                    
+                    showIcon
                     
                     selected={dateValue ? new Date(dateValue): ''}
                     onChange={(date)=>onDateChange(dateOption.value, date)}

@@ -12,6 +12,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import TaskModal from "../../components/taskModal/TaskModal";
 import { formatDate } from "../../utils/helpers";
+import { useDispatch } from "react-redux";
+import { setLoader  } from "../../redux/reducers/loaderSlice";
 import styles from "./singleTask.module.css";
 
 const taskApi = new TaskApi();
@@ -21,8 +23,10 @@ function SingleTask() {
   const [task, setTask] = useState(null);
   const [isEditTaskModalOpen, setEditTaskModalOpen] = useState(false);
 const navigate = useNavigate();
+const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setLoader(true));
     taskApi
       .getSingle(taskId)
       .then((task) => {
@@ -30,10 +34,12 @@ const navigate = useNavigate();
       })
       .catch((err) => {
         toast.error(err.message);
-      });
-  }, [taskId]);
+      })
+      .finally(()=>dispatch(setLoader(false)));
+  }, [taskId, dispatch]);
 
   const onEditTask = (editedTask) => {
+    dispatch(setLoader(true));
     taskApi
       .update(editedTask)
       .then((updatedTask) => {
@@ -43,10 +49,12 @@ const navigate = useNavigate();
       })
       .catch((err) => {
         toast.error(err.message);
-      });
+      })
+      .finally(()=>dispatch(setLoader(false)));
   };
 
   const onTaskDelete = () => {
+    dispatch(setLoader(true));
     taskApi
       .delete(taskId)
       .then(() => {
@@ -55,7 +63,8 @@ const navigate = useNavigate();
       })
       .catch((err) => {
         toast.error(err.message);
-      });
+      })
+      .finally(()=>dispatch(setLoader(false)));
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, } from 'react';
 import {toast } from "react-toastify";
 import { Container, Button, Row, Col } from 'react-bootstrap';
 import Task from '../../components/task/Task';
@@ -8,8 +8,10 @@ import styles from "./todo.module.css";
 import TaskModal from '../../components/taskModal/TaskModal';
 
 import Filters from "../../components/filters/Filters";
-import TaskApi from '../../api/taskApi';
-
+import TaskApi from "../../api/taskApi";
+import { useDispatch } from 'react-redux';
+import { getTaskCount } from "../../redux/reducers/taskCount";
+import { setLoader } from '../../redux/reducers/loaderSlice';
 
 const taskApi = new TaskApi();
 
@@ -19,23 +21,33 @@ function Todolist() {
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
   const [editableTask, setEditableTask] = useState(null);
-  
-  const getTasks = (filters) => {
-    taskApi.getAll(filters)
-      .then((tasks) => {
-        setTasks(tasks);
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
-  };
-  
+  const dispatch = useDispatch();
+
+const getTasks = (filters)=>{
+  dispatch(setLoader(true));
+  taskApi.getAll(filters)
+  .then((tasks) => {
+    setTasks(tasks);
+  })
+  .catch((err) => {
+    toast.error(err.message);
+  })
+  .finally(()=>{
+    dispatch(setLoader(false));
+  });
+};
+
   useEffect(() => {
     getTasks();
+    // eslint-disable-next-line
   }, []);
-  
+  useEffect(() => {
+    dispatch(getTaskCount(tasks.length));
+    // eslint-disable-next-line
+  }, [tasks.length,dispatch]);
+
   const onAddNewTask = (newTask) => {
-    
+    dispatch(setLoader(true));
     taskApi.add(newTask)
       .then((task) => {
         const tasksCopy = [...tasks];
@@ -46,9 +58,11 @@ function Todolist() {
       })
       .catch((err) => {
         toast.error(err.message);
-      });
+      })
+      .finally(()=>dispatch(setLoader(false)));
   };
   const onTaskDelete = (taskId) => {
+    dispatch(setLoader(true));
     taskApi
       .delete(taskId)
       .then(() => {
@@ -64,7 +78,8 @@ function Todolist() {
       })
       .catch((err) => {
         toast.error(err.message);
-      });
+      })
+      .finally(()=>dispatch(setLoader(false)));
   };
   
   const onTaskSelect = (taskId) => {
@@ -78,6 +93,7 @@ function Todolist() {
   };
   
   const deleteSelectedTasks = () => {
+    dispatch(setLoader(true));
     taskApi
       .deleteMany([...selectedTasks])
       .then(() => {
@@ -96,7 +112,8 @@ function Todolist() {
       })
       .catch((err) => {
         toast.error(err.message);
-      });
+      })
+      .finally(()=>dispatch(setLoader(false)));
   };
   
   const selectAllTasks = () => {
@@ -109,6 +126,7 @@ function Todolist() {
   };
  
   const onEditTask = (editedTask) => {
+    dispatch(setLoader(true));
     taskApi
       .update(editedTask)
       .then((task) => {
@@ -122,7 +140,8 @@ function Todolist() {
       })
       .catch((err) => {
         toast.error(err.message);
-      });
+      })
+      .finally(()=>dispatch(setLoader(false)));
   };
  
   const onFilter = (filters) => {
@@ -206,6 +225,6 @@ function Todolist() {
     </main>
  
  );
-};
+}
 
 export default Todolist;

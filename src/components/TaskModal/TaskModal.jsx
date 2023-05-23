@@ -23,7 +23,7 @@ function TaskModal(props) {
       setDescription(data.description);
       setDate(data.date ? new Date(data.date) : new Date());
       setIsTitleValid(true);
-    };
+    }
   }, [props]);
   const saveTask = () => {
     const newTask = {
@@ -33,7 +33,7 @@ function TaskModal(props) {
     };
     if (props.data) {
       newTask._id = props.data._id;
-    };
+    }
     props.onSave(newTask);
   };
   const onTitleChange = (event) => {
@@ -48,7 +48,7 @@ function TaskModal(props) {
       if (key === 's' && (ctrlKey || metaKey)) {
         event.preventDefault();
         saveTask();
-      };
+      }
     };
     document.addEventListener("keydown", keydownHandler);
     return () => {
@@ -101,7 +101,7 @@ function TaskModal(props) {
       </Modal.Footer>
     </Modal>
   );
-};
+}
 TaskModal.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,

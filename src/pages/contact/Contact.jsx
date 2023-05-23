@@ -1,46 +1,120 @@
 import {useRef, useState} from 'react';
 import { Button, Form } from 'react-bootstrap/';
+import FormApi from "../../api/formApi";
+import { toast } from "react-toastify";
+import styles from "./contact.module.css";
+
+const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+const formApi = new FormApi();
 
 function Contact(){
-const inputRef = useRef(null);
-const [value, setValue] = useState('');
+    const nameRef = useRef(null);
+    const emailRef = useRef(null);
+    const messageRef = useRef(null);
+    const [emailErrorMessage, setEmailErrorMessage] = useState(null);
+    const [nameErrorMessage, setNameErrorMessage] = useState(null);
 
-const handleClick = ()=>{
-    console.log(inputRef.current.value);
-    inputRef.current.value = '';
-};
 
-    return(
-        <div className="container">
-            <div className="row">
-                <div className="col-8">
-                <Form className='mt-5'>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>*Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" value={value} onChange={(e)=>setValue(e.target.value)} />
-        
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasic">
-        <Form.Label>*Your Name</Form.Label>
-        <Form.Control type="text" placeholder="Your name" ref={inputRef}/>
-        
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Your text</Form.Label>
-        <Form.Control as="textarea" placeholder="Your text" />
-        
-      </Form.Group>
+    const handleSubmit = async () => {
+        const email = emailRef.current.value;
+        const name = nameRef.current.value;
+        const message = messageRef.current.value;
+    if (!name) {
+        setNameErrorMessage("Name is required!");
+      } else {
+        setNameErrorMessage(null);
+      }
+  
+      if (!email) {
+        setEmailErrorMessage("Email address is required!");
+        return;
+      }
+      setEmailErrorMessage(null);
+  
+      if (!emailRegex.test(email)) {
+        setEmailErrorMessage("Email address is not valid!");
+        return;
+      }
+      setEmailErrorMessage(null);
+      if (nameErrorMessage) {
+        return;
+      }
+      const form = {
+        name,
+        email,
+        message,
+      };
+      try {
+        await formApi.sendForm(form);
+        toast.success("Thank you for contacting us, the form has been sent!");
+        nameRef.current.value = "";
+        messageRef.current.value = "";
+        emailRef.current.value = "";
+      } catch (err) {
+        toast.error(err.message);
+      }
+    };
 
-      
-      
-      <Button variant="primary" type="submit" onClick={handleClick}>
-        Send
-      </Button>
-    </Form>
-                </div>
-            </div>
+  return (
+    <div className={styles.fill}>
+      <div>
+        <h2 className={styles.contactPageTitle}>
+          We'd Love to hear From You !
+        </h2>
+        <div className={styles.contactForm}>
+          <label htmlFor="name" className={styles.label}>
+            Full name*
+          </label>
+          <input
+            type="text"
+            id="name"
+            className={`${styles.textInput} ${
+              nameErrorMessage ? styles.invalid : ""
+            }`}
+            ref={nameRef}
+          />
+          <label htmlFor="email" className={styles.label}>
+            Email*
+          </label>
+          <input
+            type="email"
+            id="email"
+            placeholder="example@gmail.com"
+            className={`${styles.textInput} ${
+              emailErrorMessage ? styles.invalid : ""
+            }`}
+            ref={emailRef}
+          />
+          <label htmlFor="message" className={styles.label}>
+            Message
+          </label>
+          <textarea
+            id="message"
+            className={styles.textInputs}
+            rows={5}
+            ref={messageRef}
+          />
+          <Button
+            variant="success"
+            className={styles.submit}
+            onClick={handleSubmit}
+          >
+            Submit
+          </Button>
+          {nameErrorMessage && (
+            <h5 className={`${styles.errorMessage} mt-2 p-1`}>
+              {nameErrorMessage}
+            </h5>
+          )}
+          {emailErrorMessage && (
+            <h5 className={`${styles.errorMessage} mt-2 p-1`}>
+              {emailErrorMessage}
+            </h5>
+          )}
         </div>
-        
-    )
+      </div>
+    </div>
+  );
 }
+
 export default Contact;
